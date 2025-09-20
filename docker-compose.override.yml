@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  backend:
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    command: flask run --host=0.0.0.0 --port=5000 --reload
+
+  postgres:
+    ports:
+      - "5433:5432"  # expone postgres en otro puerto local (opcional, para conectar desde el host)
+
+  nginx:
+    ports:
+      - "8080:80"  # expone nginx en localhost:8080 en vez de ocupar el puerto 80 real

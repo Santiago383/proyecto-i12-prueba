@@ -1,0 +1,5 @@
+# Dockerfile para Postgres con pgRouting
+FROM pgrouting/pgrouting:16-3.5-3.8.0
+
+# Copiar los scripts de inicialización (se ejecutan automáticamente en la primera vez)
+COPY ./init-scripts /docker-entrypoint-initdb.d/

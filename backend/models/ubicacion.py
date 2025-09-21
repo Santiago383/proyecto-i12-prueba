@@ -12,6 +12,4 @@ class Ubicacion(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("User", back_populates="ubicaciones")
 
-    def __repr__(self):
-        return f"<Ubicacion {self.name} ({self.lat}, {self.lng})>"
-
+    image = db.Column(db.String(255))  # nueva columna para la foto

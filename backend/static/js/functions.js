@@ -13,16 +13,15 @@ const MapModule = (() => {
     return map;
   }
 
-  function addMarker(id, name, lat, lng) {
+  function addMarker(id, name, lat, lng, imageUrl = null) {
     if (!map) return;
-    if (markers[id]) {
-      markers[id].setLatLng([lat, lng]).bindPopup(`<b>${name}</b>`); // actualizar
-    } else {
-      markers[id] = L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup(`<b>${name}</b>`);
+    let popupContent = `<b>${name}</b>`;
+    if (imageUrl) {
+        popupContent += `<br><img src="${imageUrl}" alt="${name}" style="width:150px;height:auto;margin-top:5px;border-radius:6px;">`;
     }
+    markers[id] = L.marker([lat, lng]).addTo(map).bindPopup(popupContent);
   }
+
 
   function setView(lat, lng, zoom = 16) {
     if (!map) return;
@@ -40,7 +39,7 @@ const LocationsModule = (() => {
     try {
       const res = await fetch(`/users/${userId}/locations`);
       const data = await res.json();
-      data.forEach(loc => MapModule.addMarker(loc.id, loc.name, loc.lat, loc.lng));
+      data.forEach(loc => MapModule.addMarker(loc.id, loc.name, loc.lat, loc.lng, loc.image_url));
     } catch (err) {
       console.error("Error cargando ubicaciones:", err);
     }
@@ -79,14 +78,23 @@ const FormModule = (() => {
     }
   }
 
-  async function saveLocation(userId, name, intersection, lat, lng) {
+  async function saveLocation(userId, name, intersection, lat, lng, imageFile) {
+    const formData = new FormData();
+    formData.append("user_id", userId);
+    formData.append("name", name);
+    formData.append("intersection", intersection);
+    formData.append("lat", lat);
+    formData.append("lng", lng);
+    if (imageFile) formData.append("image", imageFile);
+
     const res = await fetch("/locations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId, name, intersection, lat, lng })
+        method: "POST",
+        body: formData
     });
+
     return await res.json();
   }
+
 
   function setupForm(userId = 1) {
     const form = document.getElementById("locationForm");
@@ -96,13 +104,12 @@ const FormModule = (() => {
       const intersection = document.getElementById("intersection").value;
 
       try {
+        const imageFile = document.getElementById("foto").files[0];
         const coords = await geocodeIntersection(intersection);
-
-        const result = await saveLocation(userId, name, intersection, coords.lat, coords.lng);
+        const result = await saveLocation(userId, name, intersection, coords.lat, coords.lng, imageFile);
         console.log("Guardado en DB:", result);
-
-        // Añadir marcador al mapa
-        MapModule.addMarker(result.id, name, coords.lat, coords.lng);
+        
+        MapModule.addMarker(result.id, name, coords.lat, coords.lng, result.image_url);
         MapModule.setView(coords.lat, coords.lng);
 
         form.reset();

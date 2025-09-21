@@ -1,6 +1,7 @@
 from . import location_bp
-from flask import request, jsonify, uuid
+from flask import request, jsonify
 from extensions import db
+import uuid
 import os
 from models.ubicacion import Ubicacion
 from models.user import User

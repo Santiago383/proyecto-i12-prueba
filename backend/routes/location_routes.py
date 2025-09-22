@@ -133,3 +133,22 @@ def delete_location(loc_id):
     db.session.delete(ubicacion)
     db.session.commit()
     return jsonify({"message": "Ubicación eliminada"})
+
+
+# Listar todas las ubicaciones
+@location_bp.route("/locations", methods=["GET"])
+def get_all_locations():
+    ubicaciones = Ubicacion.query.all()
+    return jsonify([
+        {
+            "id": u.id,
+            "name": u.name,
+            "intersection": u.intersection,
+            "lat": u.lat,
+            "lng": u.lng,
+            "image_url": f"/static/uploads/{u.image}" if u.image else None,
+            "user_id": u.user_id
+        }
+        for u in ubicaciones
+    ])
+

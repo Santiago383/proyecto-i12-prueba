@@ -35,9 +35,9 @@ const MapModule = (() => {
 // Carga de ubicaciones
 // =======================
 const LocationsModule = (() => {
-  async function loadLocations(userId = 1) {
+  async function loadLocations(userId) {
     try {
-      const res = await fetch(`/users/${userId}/locations`);
+      const res = await fetch(`/locations`);
       const data = await res.json();
       data.forEach(loc => MapModule.addMarker(loc.id, loc.name, loc.lat, loc.lng, loc.image_url));
     } catch (err) {
@@ -96,7 +96,7 @@ const FormModule = (() => {
   }
 
 
-  function setupForm(userId = 1) {
+  function setupForm(userId) {
     const form = document.getElementById("locationForm");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -127,6 +127,6 @@ const FormModule = (() => {
 // =======================
 window.onload = () => {
   MapModule.initMap();
-  LocationsModule.loadLocations(1); // de momento cargamos user 1
-  FormModule.setupForm(1);
+  LocationsModule.loadLocations(USER_ID); // de momento cargamos user 1
+  FormModule.setupForm(USER_ID);
 };

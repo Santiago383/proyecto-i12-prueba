@@ -11,18 +11,20 @@
   <div id="form-container">
     <h2>Agregar intersección</h2>
     <form id="locationForm">
-      <label>Nombre del lugar:</label>
+      <label for="name">Nombre del lugar:</label>
       <input type="text" id="name" placeholder="Ej: Esquina importante" required />
 
-      <label>Intersección (Calle 1 y Calle 2):</label>
+      <label for="intersection">Intersección (Calle 1 y Calle 2):</label>
       <input type="text" id="intersection" placeholder="Ej: Calle 2 esquina 62, La Plata" required />
 
-      <button type="submit">Agregar al mapa</button>
-
+      <label for="foto">Foto:</label>
       <input type="file" id="foto" accept="image/*">
       <div id="file-name">Ningún archivo seleccionado</div>
+
+      <button type="submit">Agregar al mapa</button>
     </form>
   </div>
+
 
   <div id="map"></div>
 

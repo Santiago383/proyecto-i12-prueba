@@ -30,7 +30,7 @@ def register():
 
         session["user_id"] = new_user.id
         flash("Usuario registrado con éxito", "success")
-        return redirect(url_for("main.frontend"))
+        return redirect(url_for("main.map_view"))
 
     return render_template("register.html")
 
@@ -47,7 +47,7 @@ def login():
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
             flash("Login exitoso!", "success")
-            return redirect(url_for("main.frontend"))
+            return redirect(url_for("main.map_view"))
         elif user:
             flash("Contraseña incorrecta", "danger")
         else:

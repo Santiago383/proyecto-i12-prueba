@@ -1,6 +1,6 @@
 from flask import Flask
 from extensions import db, migrate
-from routes import main_bp, location_bp
+from routes import main_bp, location_bp, auth_bp
 import os
 
 def create_app():
@@ -20,6 +20,7 @@ def create_app():
     # Registrar blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(location_bp)
+    app.register_blueprint(auth_bp)
 
     return app
 
